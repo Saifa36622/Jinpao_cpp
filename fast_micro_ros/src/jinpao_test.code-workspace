@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../jinpao_ws/src/JINPAO_NAIA/jinpao_test"
+		},
+		{
+			"name": "fast_micro_ros",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
