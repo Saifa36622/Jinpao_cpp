@@ -69,7 +69,7 @@ void error_loop() {
 void timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
   RCLC_UNUSED(last_call_time);
   if (timer != NULL) {
-    RCSOFTCHECK(rcl_publish(&publisher_odom, &pub_msg, NULL));
+    RCSOFTCHECK(rcl_publish(&publisher_odom, &pub_msg_odom, NULL));
     // Allocate memory for Float32MultiArray
     // Free memory if not needed anymore
     // free(pub_msg.data.data);
@@ -86,13 +86,11 @@ void subscription_callback_vx(const void * msgin) {
 void subscription_callback_vy(const void * msgin) {  
   const std_msgs__msg__Float32 * msg = (const std_msgs__msg__Float32 *)msgin; 
   pub_msg_callback.data.data[1] = msg -> data; 
-  RCSOFTCHECK(rcl_publish(&publisher_callback, &pub_msg_callback, NULL));
 }
 
 void subscription_callback_w(const void * msgin) {  
   const std_msgs__msg__Float32 * msg = (const std_msgs__msg__Float32 *)msgin; 
-  pub_msg_callback.data.data[2] = msg -> data; 
-  RCSOFTCHECK(rcl_publish(&publisher_callback, &pub_msg_callback, NULL));
+  pub_msg_callback.data.data[2] = msg -> data;
 }
 
 void setup() {
@@ -150,7 +148,7 @@ void setup() {
     timer_callback));
 
   // create executor
-  RCCHECK(rclc_executor_init(&executor, &support.context, 5, &allocator));
+  RCCHECK(rclc_executor_init(&executor, &support.context, 7, &allocator));
   RCCHECK(rclc_executor_add_timer(&executor, &timer));
   RCCHECK(rclc_executor_add_subscription(&executor, &subscriber_vx, &sup_msg_vx, &subscription_callback_vx, ON_NEW_DATA));
   RCCHECK(rclc_executor_add_subscription(&executor, &subscriber_vy, &sup_msg_vy, &subscription_callback_vy, ON_NEW_DATA));
